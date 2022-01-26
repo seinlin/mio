@@ -477,7 +477,7 @@ impl ops::Sub for UnixReady {
     }
 }
 
-#[deprecated(since = "0.6.10", note = "removed")]
+//#[deprecated(since = "0.6.10", note = "removed")]
 #[cfg(feature = "with-deprecated")]
 #[doc(hidden)]
 impl ops::Not for UnixReady {

@@ -11,7 +11,7 @@ use std::fmt;
 use std::io::{Read, Write};
 use std::net::{self, SocketAddr, SocketAddrV4, SocketAddrV6, Ipv4Addr, Ipv6Addr};
 use std::time::Duration;
-
+use log::{debug, error};
 use net2::TcpBuilder;
 use iovec::IoVec;
 
@@ -577,7 +577,16 @@ impl TcpListener {
     /// returned along with it.
     pub fn accept(&self) -> io::Result<(TcpStream, SocketAddr)> {
         let (s, a) = try!(self.accept_std());
-        Ok((TcpStream::from_stream(s)?, a))
+        match TcpStream::from_stream(s) {
+            Ok(t) => {
+                info!("DEBUG ACTIX accept tcp: {:?}", t);
+                Ok((t, a))
+            },
+            Err(e) => {
+                info!("DEBUG ACTIX accept error: {:?}", e);
+                Err(e)
+            }
+        }
     }
 
     /// Accepts a new `std::net::TcpStream`.

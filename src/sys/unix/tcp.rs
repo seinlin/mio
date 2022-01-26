@@ -4,6 +4,7 @@ use std::net::{self, SocketAddr};
 use std::os::unix::io::{RawFd, FromRawFd, IntoRawFd, AsRawFd};
 use std::time::Duration;
 
+use log::{debug, error};
 use libc;
 use net2::TcpStreamExt;
 use iovec::IoVec;
@@ -216,7 +217,16 @@ impl TcpListener {
     }
 
     pub fn accept(&self) -> io::Result<(net::TcpStream, SocketAddr)> {
-        self.inner.accept()
+        match self.inner.accept() {
+            Ok(t) => {
+                debug!("DEBUG accept Ok.");
+                Ok(t)
+            },
+            Err(e) => {
+                debug!("DEBUG accept error: {:?}.", e);
+                Err(e)
+            }
+        }
     }
 
     #[allow(deprecated)]
